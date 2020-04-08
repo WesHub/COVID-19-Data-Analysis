@@ -9,7 +9,6 @@ output: html_notebook
 
 
 ###### Front Matter
-
 ```{r}
 # clean up workspace environment
 rm(list = ls())
@@ -21,9 +20,22 @@ library(DataComputing)
 
 ```
 
-###### Data
+###### Data Imports
 ```{r}
 coronavirus <- read.csv("total_cases.csv")
 ```
 
 ## Introduction
+
+With some of the biggest nation's businesses, facilities, and schools shutting down we find our selves in an epidemic in 2020. Today the world is affect by a fast spreading virus with an exponential growth of people infected. With this project we want to analyze the spread of the corona virus, taking into account countries locations, population sizes, and the spread in a specific country.
+
+## Data Source
+###### Where did you find them?
+
+###### Who collected/maintains them?
+
+###### When & Why were they originally collected?
+
+###### What does a case represent in each data source, and how many total cases are availiable?
+
+###### What are some variables that you plan to use?

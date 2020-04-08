@@ -1772,8 +1772,8 @@ library(DataComputing)
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="data" class="section level6">
-<h6>Data</h6>
+<div id="data-imports" class="section level6">
+<h6>Data Imports</h6>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29yb25hdmlydXMgPC0gcmVhZC5jc3YoXCJ0b3RhbF9jYXNlcy5jc3ZcIilcbmBgYCJ9 -->
@@ -1785,10 +1785,29 @@ library(DataComputing)
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
+<p>With some of the biggest nation’s businesses, facilities, and schools shutting down we find our selves in an epidemic in 2020. Today the world is affect by a fast spreading virus with an exponential growth of people infected. With this project we want to analyze the spread of the corona virus, taking into account countries locations, population sizes, and the spread in a specific country.</p>
+</div>
+<div id="data-source" class="section level2">
+<h2>Data Source</h2>
+<div id="where-did-you-find-them" class="section level6">
+<h6>Where did you find them?</h6>
+</div>
+<div id="who-collectedmaintains-them" class="section level6">
+<h6>Who collected/maintains them?</h6>
+</div>
+<div id="when-why-were-they-originally-collected" class="section level6">
+<h6>When &amp; Why were they originally collected?</h6>
+</div>
+<div id="what-does-a-case-represent-in-each-data-source-and-how-many-total-cases-are-availiable" class="section level6">
+<h6>What does a case represent in each data source, and how many total cases are availiable?</h6>
+</div>
+<div id="what-are-some-variables-that-you-plan-to-use" class="section level6">
+<h6>What are some variables that you plan to use?</h6>
 <!-- rnb-text-end -->
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1RBVCAxODQgSG9tZXdvcmsgRXhlcmNpc2VzIiAKc3VidGl0bGU6ICJEYXRhQ29tcHV0aW5nIENoYXB0ZXJzIDEgJiAyIgphdXRob3I6ICJZb3VyIE5hbWUiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIENvcm9uYXZpcnVzCgoKIyMjIyMjIEZyb250IE1hdHRlcgoKYGBge3J9CiMgY2xlYW4gdXAgd29ya3NwYWNlIGVudmlyb25tZW50CnJtKGxpc3QgPSBscygpKQoKIyBhbGwgcGFja2FnZXMgdXNlZCBmb3IgdGhlIGFzc2lnbm1lbnQKbGlicmFyeShtb3NhaWMpCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KERhdGFDb21wdXRpbmcpCgpgYGAKCiMjIyMjIyBEYXRhCmBgYHtyfQpjb3JvbmF2aXJ1cyA8LSByZWFkLmNzdigidG90YWxfY2FzZXMuY3N2IikKYGBgCgojIyBJbnRyb2R1Y3Rpb24K</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU1RBVCAxODQgSG9tZXdvcmsgRXhlcmNpc2VzIiAKc3VidGl0bGU6ICJEYXRhQ29tcHV0aW5nIENoYXB0ZXJzIDEgJiAyIgphdXRob3I6ICJZb3VyIE5hbWUiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIENvcm9uYXZpcnVzCgoKIyMjIyMjIEZyb250IE1hdHRlcgpgYGB7cn0KIyBjbGVhbiB1cCB3b3Jrc3BhY2UgZW52aXJvbm1lbnQKcm0obGlzdCA9IGxzKCkpCgojIGFsbCBwYWNrYWdlcyB1c2VkIGZvciB0aGUgYXNzaWdubWVudApsaWJyYXJ5KG1vc2FpYykKbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoRGF0YUNvbXB1dGluZykKCmBgYAoKIyMjIyMjIERhdGEgSW1wb3J0cwpgYGB7cn0KY29yb25hdmlydXMgPC0gcmVhZC5jc3YoInRvdGFsX2Nhc2VzLmNzdiIpCmBgYAoKIyMgSW50cm9kdWN0aW9uCgpXaXRoIHNvbWUgb2YgdGhlIGJpZ2dlc3QgbmF0aW9uJ3MgYnVzaW5lc3NlcywgZmFjaWxpdGllcywgYW5kIHNjaG9vbHMgc2h1dHRpbmcgZG93biB3ZSBmaW5kIG91ciBzZWx2ZXMgaW4gYW4gZXBpZGVtaWMgaW4gMjAyMC4gVG9kYXkgdGhlIHdvcmxkIGlzIGFmZmVjdCBieSBhIGZhc3Qgc3ByZWFkaW5nIHZpcnVzIHdpdGggYW4gZXhwb25lbnRpYWwgZ3Jvd3RoIG9mIHBlb3BsZSBpbmZlY3RlZC4gV2l0aCB0aGlzIHByb2plY3Qgd2Ugd2FudCB0byBhbmFseXplIHRoZSBzcHJlYWQgb2YgdGhlIGNvcm9uYSB2aXJ1cywgdGFraW5nIGludG8gYWNjb3VudCBjb3VudHJpZXMgbG9jYXRpb25zLCBwb3B1bGF0aW9uIHNpemVzLCBhbmQgdGhlIHNwcmVhZCBpbiBhIHNwZWNpZmljIGNvdW50cnkuCgojIyBEYXRhIFNvdXJjZQojIyMjIyMgV2hlcmUgZGlkIHlvdSBmaW5kIHRoZW0/CgojIyMjIyMgV2hvIGNvbGxlY3RlZC9tYWludGFpbnMgdGhlbT8KCiMjIyMjIyBXaGVuICYgV2h5IHdlcmUgdGhleSBvcmlnaW5hbGx5IGNvbGxlY3RlZD8KCiMjIyMjIyBXaGF0IGRvZXMgYSBjYXNlIHJlcHJlc2VudCBpbiBlYWNoIGRhdGEgc291cmNlLCBhbmQgaG93IG1hbnkgdG90YWwgY2FzZXMgYXJlIGF2YWlsaWFibGU/CgojIyMjIyMgV2hhdCBhcmUgc29tZSB2YXJpYWJsZXMgdGhhdCB5b3UgcGxhbiB0byB1c2U/</div>
 
 
 
