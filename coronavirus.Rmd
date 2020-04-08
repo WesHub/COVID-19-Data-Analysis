@@ -1,0 +1,22 @@
+---
+title: "STAT 184 Homework Exercises" 
+subtitle: "DataComputing Chapters 1 & 2"
+author: "Your Name"
+output: html_notebook
+---
+
+## Coronavirus
+
+
+## Front Matter
+
+```{r}
+# clean up workspace environment
+rm(list = ls())
+
+# all packages used for the assignment
+library(mosaic)
+library(tidyverse)
+library(DataComputing)
+
+```
