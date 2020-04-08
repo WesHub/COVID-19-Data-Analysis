@@ -18,6 +18,7 @@ library(mosaic)
 library(tidyverse)
 library(DataComputing)
 
+
 ```
 
 ###### Data Imports
@@ -30,12 +31,52 @@ coronavirus <- read.csv("total_cases.csv")
 With some of the biggest nation's businesses, facilities, and schools shutting down we find our selves in an epidemic in 2020. Today the world is affect by a fast spreading virus with an exponential growth of people infected. With this project we want to analyze the spread of the corona virus, taking into account countries locations, population sizes, and the spread in a specific country.
 
 ## Data Source
-###### Where did you find them?
+##### Where did you find them?
+We found our data looking for .csv files of cases on the coronavirus.
 
-###### Who collected/maintains them?
+##### Who collected/maintains them?
+The data is collected by the European Centre for Disease Prevention and Control (ECDC) but maintained in csv format by Our World Data.
 
-###### When & Why were they originally collected?
+##### When & Why were they originally collected?
+Every day from 6am to 10am CET data is published by the ECDC and formatted for .csv around 1pm CET by Our World Data. The data is originally collected to keep a track of the situation regaurding the coronavirus.
 
-###### What does a case represent in each data source, and how many total cases are availiable?
+##### What does a case represent in each data source, and how many total cases are availiable?
+```{r}
+coronavirus
+```
+From our visual of our dataset it shows the number of World cases and cases per country. There are currently a total of 99 cases as the epidemic is fairly recent.
 
-###### What are some variables that you plan to use?
+
+##### What are some variables that you plan to use?
+Variables we plan on using is the date and countries(perferably countries with the high cases like United States, China, Italy, Spain)
+
+## Explore intuition related to the research question
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = China)) +
+  geom_point() +
+  ggtitle("China")
+```
+
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = Italy)) +
+  geom_point() +
+  ggtitle("Italy")
+```
+
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = United.States)) +
+  geom_point() +
+  ggtitle("United States")
+```
+
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = World)) +
+  geom_point() +
+  ggtitle("World")
+```
+
+From our observations from the 4 graphs we can see senerios for different countries and internationally. We see that the spread of the coronavirus in China is significantly slowing down, while the United States, Italy, and the World continue to have a spread of the virus.
