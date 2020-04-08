@@ -24,6 +24,7 @@ library(DataComputing)
 ###### Data Imports
 ```{r}
 coronavirus <- read.csv("total_cases.csv")
+confirmed <- read.csv("covid19confirmed.csv")
 ```
 
 ## Introduction
@@ -80,3 +81,15 @@ coronavirus %>%
 ```
 
 From our observations from the 4 graphs we can see senerios for different countries and internationally. We see that the spread of the coronavirus in China is significantly slowing down, while the United States, Italy, and the World continue to have a spread of the virus.
+
+* **How do COVID-19 cases compare in various countries around the world, along with total global cases?**
+
+* The 'confirmed' data set is provided and maintained by the European Centre for Disease Prevention and Control. The data is used to keep track of the total number of confirmed cases of COVID-19 around the world. Each data set case represents the total number of COVID-19 cases in a given country on a given day. All cases are up-to-date as of April 7, 2020.
+
+* The below ggplot is an example of where the total number of COVID-19 cases are in China, based on providence. We see that the *vast* majority of cases are in Hubei providence, which is where Wuhan is located. 
+
+```{r}
+confirmed_stats <- confirmed %>% filter(Date == "4/7/2020", Country.Region == "China") %>% select(Province.State, Value)
+confirmed_stats$Value <- as.numeric(as.character(confirmed_stats$Value))
+ggplot(data=confirmed_stats, aes(x=Province.State, y=Value, fill=Province.State)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
