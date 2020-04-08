@@ -8,7 +8,7 @@ output: html_notebook
 ## Coronavirus
 
 
-## Front Matter
+###### Front Matter
 
 ```{r}
 # clean up workspace environment
@@ -21,3 +21,9 @@ library(DataComputing)
 
 ```
 
+###### Data
+```{r}
+coronavirus <- read.csv("total_cases.csv")
+```
+
+## Introduction
