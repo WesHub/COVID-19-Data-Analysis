@@ -1,7 +1,7 @@
 ---
 title: "STAT 184 Homework Exercises" 
 subtitle: "DataComputing Chapters 1 & 2"
-author: "Your Name"
+author: "Weslee Hwang and Andrew"
 output: html_notebook
 ---
 
@@ -17,7 +17,6 @@ rm(list = ls())
 library(mosaic)
 library(tidyverse)
 library(DataComputing)
-
 
 ```
 
@@ -92,4 +91,32 @@ From our observations from the 4 graphs we can see senerios for different countr
 confirmed_stats <- confirmed %>% filter(Date == "4/7/2020", Country.Region == "China") %>% select(Province.State, Value)
 confirmed_stats$Value <- as.numeric(as.character(confirmed_stats$Value))
 ggplot(data=confirmed_stats, aes(x=Province.State, y=Value, fill=Province.State)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+```{r}
+
+
+coronaMap <- t(coronavirus)
+
+
+coronaMap = setNames(data.frame(t(coronavirus[,-1])), coronavirus[,1])
+coronaMap = coronaMap[-1,] 
+
+coronaMap
+
+coronaMap <- coronaMap %>% 
+  rownames_to_column(var = "country")
+
+coronaMap
+
+coronaMap %>%
+  rename(total= `2020-04-07`) %>%
+  filter(total > 1000) %>%
+  WorldMap(key = country, fill = total)
+```
+
+```{r}
+like <- "\."
+coronaMap %>%
+  filter(grepl(like, country, ignore.case = TRUE))
 ```

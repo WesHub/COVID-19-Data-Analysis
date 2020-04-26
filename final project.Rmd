@@ -15,6 +15,7 @@ output: html_notebook
 library(dplyr)
 library(ggplot2)
 library(tidyverse)
+
 confirmed_stats <- confirmed %>% filter(Date == "4/7/2020", Country.Region == "China") %>% select(Province.State, Value)
 confirmed_stats$Value <- as.numeric(as.character(confirmed_stats$Value))
 ggplot(data=confirmed_stats, aes(x=Province.State, y=Value, fill=Province.State)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 60, hjust = 1))
