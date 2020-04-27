@@ -1,7 +1,7 @@
 ---
-title: "STAT 184 Homework Exercises" 
-subtitle: "DataComputing Chapters 1 & 2"
-author: "Weslee Hwang and Andrew"
+title: "Data Anaylsis on COVID-19" 
+subtitle: "STAT 184 Final Project"
+author: "Weslee Hwang and Gary Andrew Modzelewski"
 output: html_notebook
 ---
 
@@ -17,18 +17,58 @@ rm(list = ls())
 library(mosaic)
 library(tidyverse)
 library(DataComputing)
-
+library(lubridate)
+library(party)
 ```
-
 ###### Data Imports
 ```{r}
+# WHO Corona dataset
 coronavirus <- read.csv("total_cases.csv")
 confirmed <- read.csv("covid19confirmed.csv")
+
+#data sets used provided by ECDC and OurWorld
+ecdc <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings="",fileEncoding="UTF-8-BOM")
+
+covid19 <- read.csv("total_cases_apr25.csv")
 ```
 
 ## Introduction
 
-With some of the biggest nation's businesses, facilities, and schools shutting down we find our selves in an epidemic in 2020. Today the world is affect by a fast spreading virus with an exponential growth of people infected. With this project we want to analyze the spread of the corona virus, taking into account countries locations, population sizes, and the spread in a specific country.
+COVID-19, more commonly know as the coronavirus, has taken the world by a storm. A fast spreading disease with similar ways of penetrating a human's immune system as the flu, it has been rapidly infecting people at a high rate. With some of the world's biggest nations subsequently be left in the hands of a random variable businesses, facilities, and a way of life has been threatened.
+
+The purpose of this document is take a deeper look at the effects and spread of the COVID-19. We want to run an analysis on the impact it on specific countries, projecting the spread with accounts to location, population size, and preliminary precautions.
+
+
+## Focus
+```{r}
+## Transposed dataframe setting dates as variables
+coronaMap <- setNames(data.frame(t(coronavirus[,-1])), coronavirus[,1])
+
+## Renamed variable for countries
+coronaMap <- coronaMap %>% 
+  rownames_to_column(var = "country")
+
+## Removed world from countries list
+coronaMap = coronaMap[-1,] 
+
+## Used regex to remove periods inbetween country names
+like <- "\\."
+coronaMap <- coronaMap %>%
+  mutate(country = gsub(pattern = like, replacement = " ", country))
+
+## Visual of data on world map
+coronaMap <- coronaMap %>%
+  rename(Cases = `2020-04-07`) 
+
+coronaMap %>%
+  WorldMap(key = country, fill = Cases)
+
+as.data.frame(coronaMap[,c(1,100)]) %>%
+  filter(Cases > 10000) %>%
+  arrange(desc(Cases))
+```
+
+The focus of our attention will be brought to countries most impacted by COVID-19. Taking a look at the graphs of the world we notice couple major countries. United States, Spain, Italy, Germany, and China as our top five countries with the highest cases of COVID-19. We decided to take a closer look at 3 countries United States, as they currently have the highest count of cases, 
 
 ## Data Source
 ##### Where did you find them?
@@ -51,72 +91,208 @@ From our visual of our dataset it shows the number of World cases and cases per 
 Variables we plan on using is the date and countries(perferably countries with the high cases like United States, China, Italy, Spain)
 
 ## Explore intuition related to the research question
-```{r}
-coronavirus %>%
-  ggplot(aes(x = date, y = China)) +
-  geom_point() +
-  ggtitle("China")
-```
 
+#### World
 ```{r}
-coronavirus %>%
-  ggplot(aes(x = date, y = Italy)) +
-  geom_point() +
-  ggtitle("Italy")
-```
+## Format Year, Month, and Date to R standards
+coronavirus <- coronavirus %>%
+  mutate(date = ymd(date))
 
-```{r}
-coronavirus %>%
-  ggplot(aes(x = date, y = United.States)) +
-  geom_point() +
-  ggtitle("United States")
-```
-
-```{r}
 coronavirus %>%
   ggplot(aes(x = date, y = World)) +
-  geom_point() +
+  geom_point(aes(color = World)) +
+  ggtitle("World")
+
+coronavirus %>%
+  filter(date > as.Date("2020-03-15")) %>%
+  ggplot(aes(x = date, y = World)) +
+  geom_point(aes(color = World)) +
   ggtitle("World")
 ```
 
-From our observations from the 4 graphs we can see senerios for different countries and internationally. We see that the spread of the coronavirus in China is significantly slowing down, while the United States, Italy, and the World continue to have a spread of the virus.
+Running an anaylsis on the total cases of the World, we notice that the amount of cases are steady from mid March to the beginning of January. It rapid increase can be seen from March 16 to April 06, with cases increasing from 167,418	to 1,316,988 cases.
+
+```{r}
+days = 15
+end = 1316988
+begin = 167418
+
+difference = end-begin
+
+(difference/begin) * 100
+```
+
+From this period between March 16 to April 06, we had an increase amoung of cases of 686.65 percent.
+
+
+#### China
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = China)) +
+  geom_point(aes(color = China)) +
+  ggtitle("China")
+
+coronavirus %>%
+  filter(date < as.Date("2020-02-25"), date > as.Date("2020-01-15")) %>%
+  ggplot(aes(x = date, y = World)) +
+  geom_point(aes(color = World)) +
+  ggtitle("World")
+```
+
+It is important to look at China when analyzing the COVID-19. The virus intially started in Wuhan, China with patient zero starting the infection with the consumtion of a uncooked bat. Being the origin of the virus China was the first to be impacted by COVID-19. We can analyze an rapid growth between January 25 to Febuary 25. We can also notice that the country is plateauing from Febuary 25 and beyond. Their initial response to the disease put the city of Wuhan under quaritine on Janaury 23 (https://www.express.co.uk/travel/articles/1257717/china-lockdown-how-long-was-china-lockdown-timeframe-wuhan). China having a population of 1.3 billion and the city of Wuhan with 11 million, the difficulty of containing and tending to each person has had Wuhan's current infrastructure full. Reacting quickly to COVID-19, China started the construction of two medical facilities on January 23 and January 25, operational on Febuary 3 and Febuary 5 respectively. Each medical facility could house 1000 plus patients at once and were close by city districts (https://www.wsj.com/articles/how-china-can-build-a-coronavirus-hospital-in-10-days-11580397751). As the virus takes 2 weeks to confirm a case, we can see some correlation from the constructions of the hospitals and a nation wide quaritine to the plateauing from Febuary 25 and beyond.
+
+![](https://ichef.bbci.co.uk/news/410/cpsprodpb/12D6E/production/_110666177_china_wuhan_v4_640-nc.png)
+
+
+#### Spain
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = Spain)) +
+  geom_point(aes(color = Spain)) +
+  ggtitle("Spain")
+
+coronavirus %>%
+  filter(date > as.Date("2020-03-5")) %>%
+  ggplot(aes(x = date, y = World)) +
+  geom_point(aes(color = World)) +
+  ggtitle("World")
+```
+
+Spain currently holds the second place right after the United States. It has had a rapid growth from March til April. This could be accounted for its late reaction to lock down. Spain decided to lock down its country March 14, after the epidemic started to increase its numbers. Their late reaction to the epidemic could account for its increase of cases in the mount of March. (https://www.aljazeera.com/news/2020/04/month-lockdown-spain-children-200421115609252.html)
+
+#### United States
+```{r}
+coronavirus %>%
+  ggplot(aes(x = date, y = United.States)) +
+  geom_point(aes(color = United.States)) +
+  ggtitle("United States")
+```
+
+United States holds the highest amount of cases currently in the world. United States had a similar reaction compared to Spain. They reacted late to the epidemic, starting quaritine mid March. As each state governs its own lock down date, New York started quaritine March 16. Altough starting its quartine relative to other states, it remains the state with the most cases with nearly 300,000. It can be attributed to New York City with a population of 8 million people 302 mile square. Relatively a less densely populated state like South Dakota has around 2,000 cases.
+
 
 * **How do COVID-19 cases compare in various countries around the world, along with total global cases?**
 
-* The 'confirmed' data set is provided and maintained by the European Centre for Disease Prevention and Control. The data is used to keep track of the total number of confirmed cases of COVID-19 around the world. Each data set case represents the total number of COVID-19 cases in a given country on a given day. All cases are up-to-date as of April 7, 2020.
+* The ECDC data set is provided and maintained by the European Centre for Disease Prevention and Control. The data is used to keep track of the total number of confirmed cases of COVID-19 around the world. Each data set case represents the total number of COVID-19 cases in a given country on a given day. All cases are up-to-date as of April 25, 2020.
 
-* The below ggplot is an example of where the total number of COVID-19 cases are in China, based on providence. We see that the *vast* majority of cases are in Hubei providence, which is where Wuhan is located. 
-
-```{r}
-confirmed_stats <- confirmed %>% filter(Date == "4/7/2020", Country.Region == "China") %>% select(Province.State, Value)
-confirmed_stats$Value <- as.numeric(as.character(confirmed_stats$Value))
-ggplot(data=confirmed_stats, aes(x=Province.State, y=Value, fill=Province.State)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 60, hjust = 1))
-```
+* The covid19 data set is provided by Our World in Data and is updated daily. It provides similar data as the ECDC data set, and has been recording data "since the beginning of the pandemic".
 
 ```{r}
+#data sets used provided by ECDC and OurWorld
+ecdc <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings="",fileEncoding="UTF-8-BOM")
 
-
-coronaMap <- t(coronavirus)
-
-
-coronaMap = setNames(data.frame(t(coronavirus[,-1])), coronavirus[,1])
-coronaMap = coronaMap[-1,] 
-
-coronaMap
-
-coronaMap <- coronaMap %>% 
-  rownames_to_column(var = "country")
-
-coronaMap
-
-coronaMap %>%
-  rename(total= `2020-04-07`) %>%
-  filter(total > 1000) %>%
-  WorldMap(key = country, fill = total)
+covid19 <- read.csv("total_cases_apr25.csv")
 ```
+
+
+* Every country in the world has reported cases of COVID-19. The bar graph below shows the countries with over 15,000 confirmed cases.
 
 ```{r}
-like <- "\."
-coronaMap %>%
-  filter(grepl(like, country, ignore.case = TRUE))
+cases <- covid19 %>% 
+  filter(date == "2020-04-24") %>% 
+  select(location, total_cases) %>% 
+  group_by(location, total_cases) 
+
+cases %>% 
+  filter(total_cases > 15000, location != "World") %>% 
+  ggplot() + 
+  geom_bar(aes(reorder(location, total_cases), total_cases), stat = 'identity', position = 'dodge') + 
+  ggtitle("Countries With Over 15000 Cases as of April 24, 2020") + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
+
+* It is obvious that the United States has by far the most confirmed cases of the virus. Although the United States has the most cases, they have also done the most testing. When taking the ratio between confirmed cases and total tests, the United States has the third highest ratio. The United Kingdom has the largest ratio.
+
+* **It should be noted that the ratios are affected by someone being able to be tested. For example in the United Kingdom, many people were tested after going to the hospital with symptoms.**
+
+
+```{r}
+cases <- covid19 %>% 
+  filter(date == "2020-04-24", total_cases > 15000) %>% 
+  select(location, total_cases, total_tests)  %>% 
+  mutate(test_positive = total_cases / total_tests)
+
+validcases <- na.omit(cases)
+
+validcases %>% 
+  ggplot() + 
+  geom_bar(aes(reorder(location, test_positive), test_positive), stat = 'identity', position = 'dodge') + 
+  ggtitle("Cases/Tests Rato by Country as of April 24, 2020") + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+* The next few graphs look at the reported cases and deaths of COVID-19 for the United States, China, and Italy. As expected, the number of deaths increase with the number of cases. 
+* Italy has a higher death rate than the United States and China because they have a higher median age, as well as being one of the first countries to be afflicted. Italy is one of the main reasons the United States is currently under quarantine, so as to not overwhelm hospitals.
+
+```{r warning=FALSE}
+UScases <- covid19 %>% 
+  filter(location == "United States")
+
+UScases %>% 
+  mutate(Ydate = lubridate::yday(date)) %>% 
+  ggplot(aes(x = Ydate)) + geom_line(aes(y = total_cases, color = "total cases")) +
+  geom_line(aes(y = total_deaths, color = "total deaths")) + 
+  ggtitle("USA Cases and Deaths: Dec 31, 2019 - Apr 24, 2020") +
+  scale_y_continuous(limits = c(0, 900000), breaks = seq(0, 900000, by = 150000)) +
+  xlim(0,115)
+```
+
+
+
+
+```{r warning=FALSE}
+covid19 %>% 
+  mutate(Ydate = lubridate::yday(date)) %>% 
+  filter(location == "China") %>% 
+  ggplot(aes(x = Ydate)) + 
+  geom_line(aes(y = total_cases, color = "total cases")) + 
+  geom_line(aes(y = total_deaths, color = "total deaths")) + 
+  ggtitle("Total Cases and Deaths in China: Dec 31, 2019 - Apr 24, 2020") +
+  xlim(0,115)
+```
+
+
+
+
+```{r warning=FALSE}
+covid19 %>% 
+  mutate(Ydate = lubridate::yday(date)) %>% 
+  filter(location == "Italy") %>% 
+  ggplot(aes(x = Ydate)) + 
+  geom_line(aes(y = total_cases, color = "total cases")) + 
+  geom_line(aes(y = total_deaths, color = "total deaths")) + 
+  ggtitle("Total Cases and Deaths in Italy: Dec 31, 2019 - Apr 24, 2020") +
+  xlim(0,115)
+```
+
+* The side-by-side comparisions show just how stark the difference in total cases is for the United States, as well as the total deaths for Italy. It has been reported that China was able to flatten the curve as much as they did by implementing strict lockdown measures.
+
+```{r warning=FALSE}
+ICA <- c("Italy", "China", "United States")
+
+MediaCases <- covid19 %>% filter(location %in% ICA) 
+
+MediaCases %>% 
+  mutate(Ydate = lubridate::yday(date)) %>% 
+  ggplot(aes(x = Ydate)) + geom_line(aes(y = total_cases, color = "total cases")) +
+  geom_line(aes(y = total_deaths, color = "total deaths")) + facet_wrap(~location) +
+  ggtitle("Total Cases for Italy, China, USA: Dec 31, 2019 - Apr 24, 2020") +
+  xlim(0,115)
+```
+
+* One question that was thought of was "does the country's total population or region have any affect in the total number of deaths?" Using supervised machine learning, a decision tree was constructed for the month of April. The conclusion drawn is that the biggest factor for total deaths is simply the countries' governments overall responses.
+
+
+```{r fig.height=8, fig.width=14, warning=FALSE}
+MainCountries <- c("United_States_of_America", "Turkey", "Germany", "Italy", "Spain", "China")
+
+ecdcMain <- ecdc %>% 
+  filter(countriesAndTerritories %in% MainCountries, month == 4)
+
+MostDeaths <- ecdcMain %>% 
+  ctree(deaths ~ continentExp+countriesAndTerritories+popData2018+cases, data = .)
+
+plot(MostDeaths)
+```
+
+
