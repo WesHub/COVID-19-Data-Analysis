@@ -116,10 +116,10 @@ Running an anaylsis on the total cases of the World, we notice that the amount o
 days = 15
 end = 1316988
 begin = 167418
-
+if(end > begin){
 difference = end-begin
-
 (difference/begin) * 100
+}
 ```
 
 From this period between March 16 to April 06, we had an increase amoung of cases of 686.65 percent.
@@ -177,13 +177,10 @@ United States holds the highest amount of cases currently in the world. United S
 
 * The covid19 data set is provided by Our World in Data and is updated daily. It provides similar data as the ECDC data set, and has been recording data "since the beginning of the pandemic".
 
+
 ```{r}
-#data sets used provided by ECDC and OurWorld
-ecdc <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings="",fileEncoding="UTF-8-BOM")
-
-covid19 <- read.csv("total_cases_apr25.csv")
+covid19
 ```
-
 
 * Every country in the world has reported cases of COVID-19. The bar graph below shows the countries with over 15,000 confirmed cases.
 
